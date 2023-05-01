@@ -3,7 +3,7 @@ package us.mikefrizzell.automaton;
 /**
  * Persistent activities are run within a thread upon entering a state.
  * 
- * @author 1042090
+ * @author Mike Frizzell
  *
  */
 public interface PersistentActivity extends Activity {

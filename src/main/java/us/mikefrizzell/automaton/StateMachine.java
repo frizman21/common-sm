@@ -8,18 +8,19 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
  * 
- * @author 1042090
+ * @author Mike Frizzell
  *
  */
 public class StateMachine implements Runnable {
 
-	static Logger ConfigLogger = Logger.getLogger("friz.cs.StateMachine.Config");
-	static Logger ExecLogger = Logger.getLogger("friz.cs.StateMachine.Execution");
+	static Logger ConfigLogger = LoggerFactory.getLogger("friz.cs.StateMachine.Config");
+	static Logger ExecLogger = LoggerFactory.getLogger("friz.cs.StateMachine.Execution");
 	
 	private long mainExecutionLoopSleepDuration=10; 
 	
@@ -116,7 +117,7 @@ public class StateMachine implements Runnable {
 		
 		// communicate to listeners onEnterState
 		for(StateMachineListener listener : this.stateMachineListeners) 
-			try { listener.onEnterState(this.currentState); } catch(Exception e) { ExecLogger.warn(e); }
+			try { listener.onEnterState(this.currentState); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); }
 				
 		// run all the activities in the resulting state
 		runActivities(this.currentState.activities);
@@ -152,11 +153,11 @@ public class StateMachine implements Runnable {
 		
 		// communicate to listeners onExitState
 		for(StateMachineListener listener : this.stateMachineListeners) 
-			try { listener.onExitState(transition.to); } catch(Exception e) { ExecLogger.warn(e); } 
+			try { listener.onExitState(transition.to); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); } 
 			
 		// communicate to listeners onTransition
 		for(StateMachineListener listener : this.stateMachineListeners) 
-			try { listener.onTransition(transition); } catch(Exception e) { ExecLogger.warn(e); } 
+			try { listener.onTransition(transition); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); } 
 				
 		// run all the activities in the transition
 		runActivities(transition.activities);
@@ -167,7 +168,7 @@ public class StateMachine implements Runnable {
 		
 		// communicate to listeners onEnterState
 		for(StateMachineListener listener : this.stateMachineListeners) 
-			try { listener.onEnterState(transition.to); } catch(Exception e) { ExecLogger.warn(e); }
+			try { listener.onEnterState(transition.to); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); }
 				
 		// run all the activities in the resulting state
 		runActivities(this.currentState.activities);

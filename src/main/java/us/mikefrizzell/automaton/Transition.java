@@ -3,7 +3,7 @@ package us.mikefrizzell.automaton;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 public class Transition {
 	private Logger ConfigLogger = StateMachine.ConfigLogger;

@@ -2,7 +2,7 @@ package us.mikefrizzell.automaton;
 
 /**
  * 
- * @author 1042090
+ * @author Mike Frizzell
  *
  */
 public interface StateMachineListener {
