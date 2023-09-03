@@ -10,7 +10,6 @@ public class TimeoutActivity extends AbstractActivity {
 	
 	static Logger ExecLogger = LoggerFactory.getLogger("friz.cs.StateMachine.Execution");
 	
-	StateMachine machine;
 	TimerTask task;
 	long duration;
 	Timer timer = new Timer();
