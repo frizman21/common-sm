@@ -1,4 +1,4 @@
-package us.mikefrizzell.automaton;
+package io.github.frizman21.automaton;
 
 import java.util.Timer;
 import java.util.TimerTask;
