@@ -28,10 +28,18 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+    - id: install-secret-key
+      name: Install gpg secret key
+      run: |
+        # Install gpg secret key
+        cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
+        # Verify gpg secret key
+        gpg --list-secret-keys --keyid-format LONG
+
+    # - name: Publish to GitHub Packages Apache Maven
+    #   run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+    #   env:
+    #     GITHUB_TOKEN: ${{ github.token }}
 
     - name: Set up Apache Maven Central
       uses: actions/setup-java@v3
