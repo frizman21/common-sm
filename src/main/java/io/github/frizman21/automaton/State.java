@@ -35,8 +35,10 @@ public class State {
 
 	/**
 	 * 
+	 * @param transitionName
 	 * @param eventClass
-	 * @param resultingState
+	 * @param toState
+	 * @return
 	 */
 	public Transition addTransition(String transitionName, Class eventClass, State toState) {
 		ConfigLogger.info("Adding transition (" + transitionName + ") from " + name + " to " + toState.name);
@@ -59,7 +61,7 @@ public class State {
 	 * An activity object will be run each time through the state transition.
 	 * Activities added to the state will be executed upon entering that state serially.
 	 * 
-	 * @param e
+	 * @param activity
 	 * @return
 	 */
 	public boolean add(Activity activity) {
