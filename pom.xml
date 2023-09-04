@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.github.frizman21</groupId>
-    <artifactId>automaton</artifactId>
-	<version>0.2</version>
+    <groupId>systems.aesel</groupId>
+    <artifactId>common-sm</artifactId>
+	<version>0.5.0</version>
 	
     <name>State Machine Library</name>
     <packaging>jar</packaging>
