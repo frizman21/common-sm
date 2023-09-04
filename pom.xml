@@ -9,6 +9,9 @@
 	<version>0.5.0</version>
 	
     <name>State Machine Library</name>
+    <description>An implementation of a state machine design pattern</description>
+    <url>https://github.com/frizman21/common-sm</url>
+    
     <packaging>jar</packaging>
     
  
@@ -20,9 +23,19 @@
     	</license>
   	</licenses>
   	
+  	<developers>
+    	<developer>
+      		<name>Mike Frizzell</name>
+      		<email>mike@aesel.systems</email>
+      		<organization>aesel systems</organization>
+      		<organizationUrl>https://aesel.systems</organizationUrl>
+    	</developer>
+  	</developers>
+  	
   	<scm>
-    	<url>https://github.com/frizman21/automaton</url>
+    	<url>https://github.com/frizman21/common-sm</url>
   	</scm>
+  	
  
     <dependencies>        
 		
@@ -41,26 +54,102 @@
     	
     </dependencies> 
 
-    <build>
-    	<plugins>
-      		<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-compiler-plugin</artifactId>
-		        <version>3.2</version>
-		        <configuration>
-			    	<source>1.8</source>
-			        <target>1.8</target>
-		        </configuration>
-      		</plugin>
-      	</plugins>
-    </build>
-    
-    <distributionManagement>
-    	<repository>
-      		<id>ossrh</id>
-      		<name>Central Repository OSSRH</name>
-      		<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    	</repository>
-  	</distributionManagement>
+	<distributionManagement>
+	    <snapshotRepository>
+	      	<id>ossrh</id>
+	      	<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	    </snapshotRepository>
+	    <repository>
+	      	<id>ossrh</id>
+	    	<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	    </repository>
+	</distributionManagement>
+	  
+	<build>
+	  <plugins>
+	    <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-compiler-plugin</artifactId>
+	        <version>3.2</version>
+	        <configuration>
+	          <source>1.8</source>
+	          <target>1.8</target>
+	        </configuration>
+	      </plugin>
+	      <plugin>
+	      <artifactId>maven-assembly-plugin</artifactId>
+	      <configuration>
+	        <descriptorRefs>
+	          <descriptorRef>jar-with-dependencies</descriptorRef>
+	        </descriptorRefs>
+	      </configuration>
+	      <executions>
+		    <execution>
+		      <id>make-assembly</id> <!-- this is used for inheritance merges -->
+		      <phase>package</phase> <!-- bind to the packaging phase -->
+		      <goals>
+		        <goal>single</goal>
+		      </goals>
+		    </execution>
+		  </executions>
+	    </plugin>
+	    <plugin>
+	      <groupId>org.sonatype.plugins</groupId>
+	      <artifactId>nexus-staging-maven-plugin</artifactId>
+	      <version>1.6.13</version>
+	      <extensions>true</extensions>
+	      <configuration>
+	        <serverId>ossrh</serverId>
+	        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+	        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+	      </configuration>
+	    </plugin>
+	    <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-source-plugin</artifactId>
+	      <version>3.3.0</version>
+	      <executions>
+	        <execution>
+	          <id>attach-sources</id>
+	          <goals>
+	            <goal>jar-no-fork</goal>
+	          </goals>
+	        </execution>
+	      </executions>
+	    </plugin>
+	    
+	    <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-javadoc-plugin</artifactId>
+	      <version>2.9.1</version>
+	      <configuration>
+		    <failOnError>false</failOnError>
+		  </configuration>
+	      <executions>
+	        <execution>
+	          <id>attach-javadocs</id>
+	          <goals>
+	            <goal>jar</goal>
+	          </goals>
+	        </execution>
+	      </executions>
+	    </plugin>
+	    
+	    <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-gpg-plugin</artifactId>
+	      <version>3.1.0</version>
+	      <executions>
+	        <execution>
+	          <id>sign-artifacts</id>
+	          <phase>verify</phase>
+	          <goals>
+	            <goal>sign</goal>
+	          </goals>
+	        </execution>
+	      </executions>
+	    </plugin>
+	  </plugins>
+	</build>
 
 </project>
