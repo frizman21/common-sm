@@ -1,4 +1,4 @@
-package us.mikefrizzell.automaton;
+package io.github.frizman21.automaton;
 
 /**
  * An activity is run upon entering a state. They are run serially. The run() function should

@@ -1,5 +1,4 @@
-package us.mikefrizzell.automaton;
-
+package io.github.frizman21.automaton;
 
 public class Denied extends Event {
 

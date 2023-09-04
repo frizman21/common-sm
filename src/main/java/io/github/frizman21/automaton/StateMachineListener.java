@@ -1,4 +1,4 @@
-package us.mikefrizzell.automaton;
+package io.github.frizman21.automaton;
 
 /**
  * 

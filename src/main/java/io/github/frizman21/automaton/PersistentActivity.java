@@ -1,4 +1,4 @@
-package us.mikefrizzell.automaton;
+package io.github.frizman21.automaton;
 
 /**
  * Persistent activities are run within a thread upon entering a state.
