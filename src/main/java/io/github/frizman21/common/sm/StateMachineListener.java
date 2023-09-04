@@ -1,4 +1,4 @@
-package io.github.frizman21.automaton;
+package io.github.frizman21.common.sm;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package io.github.frizman21.automaton;
+package io.github.frizman21.common.sm;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import io.github.frizman21.common.sm.CancelTimeoutActivity;
+import io.github.frizman21.common.sm.ConfigException;
+import io.github.frizman21.common.sm.GenericTimeoutEvent;
+import io.github.frizman21.common.sm.State;
+import io.github.frizman21.common.sm.StateMachine;
+import io.github.frizman21.common.sm.TimeoutActivity;
+import io.github.frizman21.common.sm.Transition;
 
 public class TimeoutTest {
 

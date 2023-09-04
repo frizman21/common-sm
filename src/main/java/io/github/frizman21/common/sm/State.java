@@ -1,4 +1,4 @@
-package io.github.frizman21.automaton;
+package io.github.frizman21.common.sm;
 
 import java.util.ArrayList;
 import java.util.HashMap;

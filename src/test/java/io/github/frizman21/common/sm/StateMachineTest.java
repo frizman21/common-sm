@@ -1,4 +1,4 @@
-package io.github.frizman21.automaton;
+package io.github.frizman21.common.sm;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.github.frizman21.common.sm.Activity;
+import io.github.frizman21.common.sm.ConfigException;
+import io.github.frizman21.common.sm.State;
+import io.github.frizman21.common.sm.StateMachine;
+import io.github.frizman21.common.sm.StateMachineListener;
+import io.github.frizman21.common.sm.Transition;
 
 public class StateMachineTest {
 

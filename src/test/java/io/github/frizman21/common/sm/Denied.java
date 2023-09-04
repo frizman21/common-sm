@@ -1,4 +1,6 @@
-package io.github.frizman21.automaton;
+package io.github.frizman21.common.sm;
+
+import io.github.frizman21.common.sm.Event;
 
 public class Denied extends Event {
 
