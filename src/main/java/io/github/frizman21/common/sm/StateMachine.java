@@ -5,8 +5,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +34,14 @@ public class StateMachine implements Runnable {
 	String name;
 	Queue<Event> eventQueue;
 	Map<String,Object> machineState;
-	
+	protected Properties props;	
 	private Transition activeTransition;
 
-	
 	public StateMachine(String name) {
+		this(name,new Properties());
+	}
+	
+	public StateMachine(String name, Properties props) {
 		super();
 	
 		this.name = name;
@@ -45,6 +50,7 @@ public class StateMachine implements Runnable {
 		this.registeredEvents = new ArrayList<Event>();
 		eventQueue = new LinkedBlockingQueue<Event>();
 		this.machineState = new HashMap<String,Object>();
+		this.props = props;
 		
 	}
 
@@ -83,6 +89,8 @@ public class StateMachine implements Runnable {
 	public State createState(String name, boolean isEndState) {
 		ConfigLogger.info("Create state (" + name + ")");
 		State state = new State(name,isEndState,this);
+		state.init(props);
+
 		
 		this.states.add(state);
 		
@@ -133,60 +141,76 @@ public class StateMachine implements Runnable {
 		eventQueue.add(event);
 	}
 		
+	private Event activeEvent;
+	private Semaphore eventSema = new Semaphore(1);
+	
 	/**
 	 * Execute this function when an event needs to tickle the state machine.
 	 * @param event
 	 * @throws ConfigException
 	 */
 	private void executeEvent(Event event) throws ConfigException {
-		// pick the transition based on the event type
-		String className = event.getClass().getName();
-		Transition transition = currentState.get(className);
-		
-		// verify that state machine structure has this state.
-		if(transition == null) {
-			String issueText = 
-					"Current state (" + currentState.getName() + ") does not have a " +
-					"transition for that event type. (" + event.getName() + ")";
+		try {
+			eventSema.acquire();
 			
-			ConfigLogger.warn(issueText);
+			ExecLogger.debug("Processing Event " + event.getName());			
+			this.activeEvent = event;
+
+			// pick the transition based on the event type
+			String className = event.getClass().getName();
+			Transition transition = currentState.get(className);
 			
-			throw new ConfigException(issueText);
-		}
-		
-		// mark the active transition
-		activeTransition = transition;
-		
-		// communicate to listeners onExitState
-		for(StateMachineListener listener : this.stateMachineListeners) 
-			try { listener.onExitState(transition.to); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); } 
-			
-		// communicate to listeners onTransition
-		for(StateMachineListener listener : this.stateMachineListeners) 
-			try { listener.onTransition(transition); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); } 
+			// verify that state machine structure has this state.
+			if(transition == null) {
+				String issueText = 
+						"Current state (" + currentState.getName() + ") does not have a " +
+						"transition for that event type. (" + event.getName() + ")";
 				
-		// run all the activities in the transition
-		runActivities(transition.activities);
-		
-		// transition states
-		ExecLogger.debug("Transitioning from " + this.currentState.getName() + " to " + transition.to.getName() + " on " + event.getName());
-		this.currentState = transition.to;
-		
-		// communicate to listeners onEnterState
-		for(StateMachineListener listener : this.stateMachineListeners) 
-			try { listener.onEnterState(transition.to); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); }
+				ConfigLogger.warn(issueText);
 				
-		// run all the activities in the resulting state
-		runActivities(this.currentState.activities);
-		
-		// clear the active transition
-		activeTransition = null;
-		
-		// if this state is considered a termination state, flip the running flag to kill the execution loop.
-		if(this.currentState.isEndState()) {
-			running = false;
-			ExecLogger.debug("running is now false. thread should end soon.");
+				throw new ConfigException(issueText);
+			}
+			
+			// mark the active transition
+			activeTransition = transition;
+			
+			// communicate to listeners onExitState
+			for(StateMachineListener listener : this.stateMachineListeners) 
+				try { listener.onExitState(transition.to); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); } 
+				
+			// communicate to listeners onTransition
+			for(StateMachineListener listener : this.stateMachineListeners) 
+				try { listener.onTransition(transition); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); } 
+					
+			// run all the activities in the transition
+			runActivities(transition.activities);
+			
+			// transition states
+			ExecLogger.debug("Transitioning from " + this.currentState.getName() + " to " + transition.to.getName() + " on " + event.getName());
+			this.currentState = transition.to;
+			
+			// communicate to listeners onEnterState
+			for(StateMachineListener listener : this.stateMachineListeners) 
+				try { listener.onEnterState(transition.to); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); }
+					
+			// run all the activities in the resulting state
+			runActivities(this.currentState.activities);
+			
+			// clear the active transition
+			activeTransition = null;
+			
+			// if this state is considered a termination state, flip the running flag to kill the execution loop.
+			if(this.currentState.isEndState()) {
+				running = false;
+				ExecLogger.debug("running is now false. thread should end soon.");
+			}
+			
+		} catch (Exception e1) {
+			ExecLogger.warn(e1.getMessage(),e1);
+		} finally {
+			eventSema.release();
 		}
+
 	}
 	
 	/**
@@ -298,6 +322,10 @@ public class StateMachine implements Runnable {
 	
 	public Transition getActiveTransition() {
 		return activeTransition;
+	}
+	
+	public Event getActiveEvent() {
+		return activeEvent;
 	}
 	
 }

@@ -2,6 +2,8 @@ package io.github.frizman21.common.sm;
 
 import static org.junit.Assert.*;
 
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -93,6 +95,7 @@ public class StateMachineTest {
 				public void run() 		{	logger.debug("I am trying to Submit now!"); }
 				public String getName() {	return "Submitting Activity";	}
 				public void setStateMachine(StateMachine machine) {}
+				public void init(Properties props) throws ConfigException {}
 			});
 			State Approving = machine.createState("Approving");
 			Approving.add(new Activity() {
@@ -100,6 +103,7 @@ public class StateMachineTest {
 				public void run() 		{	logger.debug("I am trying to get approved now!"); }
 				public String getName() {	return "Approving Activity";	}
 				public void setStateMachine(StateMachine machine) {}
+				public void init(Properties props) throws ConfigException {}
 			});
 			State Exiting = machine.createState("Exiting",true);
 			
@@ -109,6 +113,7 @@ public class StateMachineTest {
 				public void run() 		{	logger.debug("Writing Form!"); }
 				public String getName() {	return "Write Form";	}
 				public void setStateMachine(StateMachine machine) {}
+				public void init(Properties props) throws ConfigException {}
 			});
 			Transition deny = Approving.addTransition("Deny", Denied.class, Submitting);
 			deny.add(new Activity() {
@@ -116,6 +121,7 @@ public class StateMachineTest {
 				public void run() 		{	logger.debug("Writing Denial Form!"); }
 				public String getName() {	return "Deny Form";	}
 				public void setStateMachine(StateMachine machine) {}
+				public void init(Properties props) throws ConfigException {}
 			});
 			Approving.addTransition("Exiting", ExitEvent.class, Exiting);
 			
