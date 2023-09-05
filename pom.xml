@@ -6,14 +6,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>systems.aesel</groupId>
     <artifactId>common-sm</artifactId>
-	<version>0.5.1</version>
-	
+	<version>0.5.2-SNAPSHOT</version>
     <name>State Machine Library</name>
     <description>An implementation of a state machine design pattern</description>
     <url>https://github.com/frizman21/common-sm</url>
     
     <packaging>jar</packaging>
-    
  
    	<licenses>
     	<license>
@@ -35,7 +33,6 @@
   	<scm>
     	<url>https://github.com/frizman21/common-sm</url>
   	</scm>
-  	
  
     <dependencies>        
 		
@@ -48,7 +45,7 @@
 	  	<dependency>
 	    	<groupId>junit</groupId>
 	      	<artifactId>junit</artifactId>
-	     	<version>4.11</version>
+	     	<version>4.13.1</version>
 	      	<scope>test</scope>
     	</dependency>
     	
