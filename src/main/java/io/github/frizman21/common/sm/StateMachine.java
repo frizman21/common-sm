@@ -36,6 +36,7 @@ public class StateMachine implements Runnable {
 	Map<String,Object> machineState;
 	protected Properties props;	
 	private Transition activeTransition;
+	boolean syncDefault = false;
 
 	public StateMachine(String name) {
 		this(name,new Properties());
@@ -134,11 +135,19 @@ public class StateMachine implements Runnable {
 		runActivities(this.currentState.activities);
 	}
 	
+	
 	public void eventHappens(Event event) throws ConfigException {
+		eventHappens(event, syncDefault);
+	}
+	
+	public void eventHappens(Event event, boolean sync) throws ConfigException {
 		// TODO: confirm that the current state has this event as an option.
-		ExecLogger.debug("Event " + event.getName() + " occured.");
-		
-		eventQueue.add(event);
+		ExecLogger.debug("Event " + event.getName() + " occured. sync: "+ sync);
+		if(sync) {
+			executeEvent(event);
+		} else {
+			eventQueue.add(event);
+		}
 	}
 		
 	private Event activeEvent;
@@ -328,4 +337,11 @@ public class StateMachine implements Runnable {
 		return activeEvent;
 	}
 	
+	public int getEventQueueSize() {
+		return eventQueue.size();
+	}
+	
+	public void setSyncDefault(boolean syncDefault) {
+		this.syncDefault = syncDefault;
+	}
 }
