@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 
@@ -18,6 +19,7 @@ public class State {
 	private Map<String,Transition> transitionMap;
 	List<Activity> activities;
 	StateMachine machine;
+	Properties props;
 
 	State(String name,boolean isEndState, StateMachine machine ) {
 		super();
@@ -27,6 +29,10 @@ public class State {
 		
 		activities = new ArrayList<Activity>();
 		transitionMap = new HashMap<String,Transition>();
+	}
+	
+	void init(Properties props) {
+		this.props = props;
 	}
 	
 	Transition get(String eventClassName) {
@@ -48,6 +54,7 @@ public class State {
 		
 		// build transition
 		Transition transition = new Transition(transitionName, eventClass, this, toState, machine);
+		transition.init(props);
 		
 		// add to the transition data structure.
 		transitionMap.put(className, transition);
@@ -63,11 +70,14 @@ public class State {
 	 * 
 	 * @param activity
 	 * @return
+	 * @throws ConfigException 
 	 */
-	public boolean add(Activity activity) {
+	public boolean add(Activity activity) throws ConfigException {
 		ConfigLogger.info("Adding activity (" + activity.getName() +") to state (" + name + ")");
 		
 		activity.setStateMachine(machine);
+		
+		activity.init(props);
 		
 		return activities.add(activity);
 	}

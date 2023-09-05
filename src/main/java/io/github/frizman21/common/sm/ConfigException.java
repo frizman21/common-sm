@@ -7,5 +7,10 @@ public class ConfigException extends Exception {
 	ConfigException(String message) {
 		super(message);
 	}
+	
+	ConfigException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 
 }

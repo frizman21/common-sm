@@ -2,6 +2,7 @@ package io.github.frizman21.common.sm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 
@@ -14,6 +15,7 @@ public class Transition {
 	List<Activity> activities;
 	String name;
 	StateMachine machine;
+	Properties props;
 		
 	Transition(String name, Class<Event> causalEvent, State from, State to, StateMachine machine) {
 		super();
@@ -26,11 +28,12 @@ public class Transition {
 		activities = new ArrayList<Activity>();
 	}
 
-	public boolean add(Activity activity) {
+	public boolean add(Activity activity) throws ConfigException {
 		
 		ConfigLogger.info("Adding activity (" + activity.getName() +") to transition (" + name + ")");
 		
 		activity.setStateMachine(machine);
+		activity.init(props);
 		
 		return activities.add(activity);
 	}
@@ -39,8 +42,8 @@ public class Transition {
 		return name;
 	}
 	
+	void init(Properties props) {
+		this.props = props;
+	}	
 	
-	
-	
-
 }
