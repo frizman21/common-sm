@@ -33,6 +33,9 @@ public class StateMachine implements Runnable {
 	Queue<Event> eventQueue;
 	Map<String,Object> machineState;
 	
+	private Transition activeTransition;
+
+	
 	public StateMachine(String name) {
 		super();
 	
@@ -151,6 +154,9 @@ public class StateMachine implements Runnable {
 			throw new ConfigException(issueText);
 		}
 		
+		// mark the active transition
+		activeTransition = transition;
+		
 		// communicate to listeners onExitState
 		for(StateMachineListener listener : this.stateMachineListeners) 
 			try { listener.onExitState(transition.to); } catch(Exception e) { ExecLogger.warn(e.getMessage(),e); } 
@@ -172,6 +178,9 @@ public class StateMachine implements Runnable {
 				
 		// run all the activities in the resulting state
 		runActivities(this.currentState.activities);
+		
+		// clear the active transition
+		activeTransition = null;
 		
 		// if this state is considered a termination state, flip the running flag to kill the execution loop.
 		if(this.currentState.isEndState()) {
@@ -285,6 +294,10 @@ public class StateMachine implements Runnable {
 
 	public Object putFromMachineState(String key, Object value) {
 		return machineState.put(key, value);
+	}
+	
+	public Transition getActiveTransition() {
+		return activeTransition;
 	}
 	
 }
