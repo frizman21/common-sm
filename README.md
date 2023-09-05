@@ -4,4 +4,4 @@ of a state machine diagram and its implementation in an SysML context. For examp
 can be launched when entering or exiting a state. Transition can also have activities.
 
 ## Related Links
- - [https://mvnrepository.com/artifact/systems.aesel/common-sm](Maven Central Repository)
+ - [Maven Central Repository](https://mvnrepository.com/artifact/systems.aesel/common-sm)
