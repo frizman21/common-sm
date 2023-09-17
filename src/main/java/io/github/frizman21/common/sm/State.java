@@ -42,7 +42,7 @@ public class State {
   }
 
   /**
-   * This is the method to create a link between {@link States} using a Transition.
+   * This is the method to create a link between {@link State}s using a Transition.
 
    * @param transitionName The name is used in logging output.
    * @param eventClass This is the type of {@link Event} that causes this {@link Transition} to fire
