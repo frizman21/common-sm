@@ -50,7 +50,7 @@ public class StateMachineTest {
 			State Implementing = machine.createState("Implementing");
 			State Reviewing = machine.createState("Reviewing");
 			State Closing = machine.createState("Closing");
-			State Closed = machine.createState("Closed",true);
+			State Closed = machine.createState("Closed", true);
 			
 			Submitting.		addTransition("Submitted", Next.class, Approving);
 			Approving.		addTransition("Approved", Next.class, Implementing);

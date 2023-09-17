@@ -32,7 +32,7 @@
   	
     <properties>
         <project.build.sourceDirectories>${basedir}/src/main/java</project.build.sourceDirectories>
-        <checkstyle.config.location>${basedir}/google_checks.xml</checkstyle.config.location>
+        <checkstyle.config.location>${basedir}/src/main/resources/google_checks.xml</checkstyle.config.location>
     </properties>
   	
   	<scm>
