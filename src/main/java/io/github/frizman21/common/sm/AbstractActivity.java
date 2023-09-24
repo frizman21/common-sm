@@ -14,10 +14,10 @@ public abstract class AbstractActivity implements Activity {
   public void setStateMachine(StateMachine machine) {
     this.machine = machine;
   }
-  
+
   @Override
   public void init(Properties props) throws ConfigException {
     this.props = props;
   }
-  
+
 }

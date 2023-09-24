@@ -22,8 +22,8 @@ public class State {
   List<Activity> activities;
   StateMachine machine;
   Properties props;
-
-  State(String name, boolean isEndState, StateMachine machine) {
+  
+  public State(String name, Boolean isEndState, StateMachine machine) {
     super();
     this.name = name;
     this.isEndState = isEndState;
