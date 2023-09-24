@@ -23,6 +23,13 @@ public class State {
   StateMachine machine;
   Properties props;
   
+  /**
+   * Constructor for State.
+
+   * @param name name of the state
+   * @param isEndState true if this is a terminal state
+   * @param machine parent machine
+   */
   public State(String name, Boolean isEndState, StateMachine machine) {
     super();
     this.name = name;

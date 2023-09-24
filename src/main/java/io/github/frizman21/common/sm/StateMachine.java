@@ -70,7 +70,7 @@ public class StateMachine implements Runnable {
   }
 
   /**
-   * Use to create a new {@link State}.
+   * Use to create a new initial {@link State}.
 
    * @param name Used in logging statements.
    * @return the result {@link State}
@@ -80,6 +80,14 @@ public class StateMachine implements Runnable {
     return createStartState(name, State.class);
   }
 
+  /**
+   * Use to create a new initial, custom {@link State}.
+
+   * @param name name Used in logging statements.
+   * @param clazz Custom class that extends {@link State} 
+   * @return the newly created state.
+   * @throws ConfigException if bad properties sent to State
+   */
   public State createStartState(String name, Class<? extends State> clazz) throws ConfigException {
 
     // configuring start state
@@ -96,17 +104,17 @@ public class StateMachine implements Runnable {
         return state;
         
       } catch (InstantiationException e) {
-        throw new ConfigException("failed to create State" ,e);
+        throw new ConfigException("failed to create State", e);
       } catch (IllegalAccessException e) {
-        throw new ConfigException("failed to create State" ,e);
+        throw new ConfigException("failed to create State", e);
       } catch (IllegalArgumentException e) {
-        throw new ConfigException("failed to create State" ,e);
+        throw new ConfigException("failed to create State", e);
       } catch (InvocationTargetException e) {
-        throw new ConfigException("failed to create State" ,e);
+        throw new ConfigException("failed to create State", e);
       } catch (NoSuchMethodException e) {
-        throw new ConfigException("failed to create State" ,e);
+        throw new ConfigException("failed to create State", e);
       } catch (SecurityException e) {
-        throw new ConfigException("failed to create State" ,e);
+        throw new ConfigException("failed to create State", e);
       }
       
       // if we have a start state - throw ConfigException.
@@ -128,7 +136,7 @@ public class StateMachine implements Runnable {
    * @param name Used in logging statements
    * @param isEndState mark true if this is a terminal state
    * @return {@link State}
-   * @throws ConfigException 
+   * @throws ConfigException if bad properties sent to State
    */
   public State createState(String name, boolean isEndState) throws ConfigException {
     return createState(name, isEndState, State.class); 
@@ -136,14 +144,15 @@ public class StateMachine implements Runnable {
   
   /**
    * Use this to create custom {@link State}.
-   * 
-   * @param name
-   * @param isEndState
-   * @param clazz
-   * @return
-   * @throws ConfigException
+
+   * @param name Used in logging statements
+   * @param isEndState mark true if this is a terminal state
+   * @param clazz Custom class that extends {@link State} 
+   * @return the newly created {@link State}.
+   * @throws ConfigException if bad properties sent to {@link State}.
    */
-  public State createState(String name, boolean isEndState, Class<? extends State> clazz) throws ConfigException {
+  public State createState(String name, boolean isEndState, Class<? extends State> clazz) 
+      throws ConfigException {
     
     ConfigLogger.info("Create state (" + name + ")");
     try {
@@ -158,17 +167,17 @@ public class StateMachine implements Runnable {
       return state; 
       
     } catch (InstantiationException e) {
-      throw new ConfigException("failed to create State" ,e);
+      throw new ConfigException("failed to create State", e);
     } catch (IllegalAccessException e) {
-      throw new ConfigException("failed to create State" ,e);
+      throw new ConfigException("failed to create State", e);
     } catch (IllegalArgumentException e) {
-      throw new ConfigException("failed to create State" ,e);
+      throw new ConfigException("failed to create State", e);
     } catch (InvocationTargetException e) {
-      throw new ConfigException("failed to create State" ,e);
+      throw new ConfigException("failed to create State", e);
     } catch (NoSuchMethodException e) {
-      throw new ConfigException("failed to create State" ,e);
+      throw new ConfigException("failed to create State", e);
     } catch (SecurityException e) {
-      throw new ConfigException("failed to create State" ,e);
+      throw new ConfigException("failed to create State", e);
     }
   }
 
