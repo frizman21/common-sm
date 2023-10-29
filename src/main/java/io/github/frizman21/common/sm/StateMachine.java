@@ -28,6 +28,7 @@ public class StateMachine implements Runnable {
 
   List<Event> registeredEvents;
   List<StateMachineListener> stateMachineListeners;
+  
   List<State> states;
   State currentState;
   State startState;
@@ -37,6 +38,8 @@ public class StateMachine implements Runnable {
   protected Properties props;
   private Transition activeTransition;
   boolean syncDefault = false;
+
+  List<PersistentActivity> persistentRunningActivities = new ArrayList<>();
 
   public StateMachine(String name) {
     this(name, new Properties());
@@ -289,6 +292,12 @@ public class StateMachine implements Runnable {
         throw new ConfigException(issueText);
       }
 
+      // 'kill' all persistently running activities
+      for(PersistentActivity activity : persistentRunningActivities) {
+        activity.kill();
+      }
+      persistentRunningActivities.clear();
+      
       // mark the active transition
       activeTransition = transition;
 
@@ -347,20 +356,29 @@ public class StateMachine implements Runnable {
     }
 
   }
-
+  
   /**
    * Helper function to clean up / not cut-and-paste code.
 
    * @param activities List of Activity objects that need to be executed.
    */
-  private static void runActivities(List<Activity> activities) {
+  private void runActivities(List<Activity> activities) {
     // loop through all the activities and run them
     for (Activity activity : activities) {
       try {
-
-        ExecLogger.debug("Activity (" + activity.getName() + ") being run.");
-        activity.run();
-
+        
+        if(activity instanceof PersistentActivity) {
+          ExecLogger.debug("PersistentActivity (" + activity.getName() + ") being run in a thread.");
+          Thread thread = new Thread(activity);
+          thread.start();
+          
+          ExecLogger.debug("Adding PersistentActivity (" + activity.getName() + ") to running activities list.");
+          persistentRunningActivities.add((PersistentActivity) activity);
+        } else {
+          ExecLogger.debug("Activity (" + activity.getName() + ") being run.");
+          activity.run();
+        }
+        
         // catch any exception that other people's crappy code let's through.
       } catch (Exception ex) {
         ExecLogger.warn("Activity " + activity.getName() + " threw an Exception.", ex);
