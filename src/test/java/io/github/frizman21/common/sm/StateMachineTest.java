@@ -50,7 +50,7 @@ public class StateMachineTest {
 			State Implementing = machine.createState("Implementing");
 			State Reviewing = machine.createState("Reviewing");
 			State Closing = machine.createState("Closing");
-			State Closed = machine.createState("Closed",true);
+			State Closed = machine.createState("Closed", true);
 			
 			Submitting.		addTransition("Submitted", Next.class, Approving);
 			Approving.		addTransition("Approved", Next.class, Implementing);
@@ -79,8 +79,8 @@ public class StateMachineTest {
 			if(!result)
 				fail("Didn't finish in time");
 		} catch (ConfigException e) {
+		    e.printStackTrace();
 			fail("Valid Configuration failed to take.");
-			e.printStackTrace();
 		}
 	}
 	
@@ -208,5 +208,40 @@ public class StateMachineTest {
 			fail("Valid Configuration failed to take.");
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+    public final void CustomStateTest() throws ConfigException, InterruptedException {
+	  Logger logger = LoggerFactory.getLogger(StateMachineTest.class);
+      logger.info("Starting Custom State Test");
+      
+      StateMachine machine = new StateMachine("CR Process");
+      State first = machine.createStartState("First Custom", CustomState.class);
+      State custom = machine.createState("Second Custom", false, CustomState.class);
+      State end = machine.createState("end", true);
+      
+      assertTrue(custom instanceof CustomState);
+      
+      first.addTransition("t0", Next.class, custom);
+      custom.addTransition("t1", Next.class, end);
+      
+      machine.startMachine(true);
+      
+      Thread.sleep(10);
+      
+      assertEquals(machine.getState(), first);
+      
+      machine.eventHappens(new Next(),true);
+
+      assertEquals(machine.getState(), custom);
+      
+      machine.eventHappens(new Next(),true);
+      
+      assertEquals(machine.getState(), end);
+      
+      boolean result = machine.waitUntilDone(200);
+      
+      assertTrue(result);
+      
 	}
 }
