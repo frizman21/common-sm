@@ -59,7 +59,6 @@ public class PersistentActivityTest {
       
       // it should be spinning.
       Thread.sleep(100);
-      System.out.println("iterations: " + activity.iterations);
       assertTrue(activity.iterations > 5);
       
       
