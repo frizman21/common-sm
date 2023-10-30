@@ -94,13 +94,11 @@ public class PersistentActivityTest {
     
     @Override
     public void run() {
-      System.out.println("running activity");
       running = true;
       iterations = 0;
         
       while(running) {
         try { 
-          System.out.println("counting...");
           iterations++;
           Thread.sleep(iterationDelay);
         } catch (InterruptedException e) {
